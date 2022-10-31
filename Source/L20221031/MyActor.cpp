@@ -33,6 +33,15 @@ void AMyActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	Box->OnComponentHit.AddDynamic(this, &AMyActor::ProcessHit);
+	Box->OnComponentHit.RemoveDynamic(this, &AMyActor::ProcessHit);
+
+}
+
+void AMyActor::ProcessHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	UE_LOG(LogClass, Warning, TEXT("Hit"));
+
 }
 
 // Called every frame

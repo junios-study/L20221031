@@ -71,7 +71,30 @@ void AMyPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	OnActorBeginOverlap.AddDynamic(this, &AMyPawn::ProcessOverlap2);
+	OnActorBeginOverlap.AddDynamic(this, &AMyPawn::ProcessOverlap);
+	OnActorBeginOverlap.RemoveAll(this);
+
+	Box->OnComponentHit.AddDynamic(this, &AMyPawn::ProcessHit);
+	Box->OnComponentHit.RemoveDynamic(this, &AMyPawn::ProcessHit);
 }
+
+void AMyPawn::ProcessHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	UE_LOG(LogClass, Warning, TEXT("Hit"));
+
+}
+
+void AMyPawn::ProcessOverlap(AActor* OverlappedActor, AActor* OtherActor)
+{
+	UE_LOG(LogClass, Warning, TEXT("Overlap"));
+}
+
+void AMyPawn::ProcessOverlap2(AActor* OverlappedActor, AActor* OtherActor)
+{
+	UE_LOG(LogClass, Warning, TEXT("Overlap2"));
+}
+
 
 // Called every frame
 void AMyPawn::Tick(float DeltaTime)
@@ -104,10 +127,10 @@ void AMyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AMyPawn::Pitch(float Value)
 {
 	AddActorLocalRotation(FRotator(
-		Value * 60 * UGameplayStatics::GetWorldDeltaSeconds(GetWorld())),
+		Value * 60 * UGameplayStatics::GetWorldDeltaSeconds(GetWorld()),
 		0,
 		0
-	);
+	));
 }
 
 
